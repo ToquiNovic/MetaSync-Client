@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { SVGProps } from 'react'
 import { JSX } from 'react/jsx-runtime'
 
-export default function Component () {
+export default function FormLogin () {
   return (
     <div className='flex items-center justify-center h-screen'>
       <Card className='w-full max-w-md'>
