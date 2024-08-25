@@ -1,15 +1,17 @@
+// App.tsx
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from '@/layouts/Layout'
 import HomePage from '@/pages/HomePage'
-import RequireAuth from '@/utils/RequireAuth'
 import Dashboard from '@/pages/Dashboard'
 import LoginPage from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
 import ErrorPage from '@/pages/ErrorPage'
 import { ThemeProvider } from '@/components/theme-provider'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
+// import AuthContext from '@/utils/AuthContext'
+import DashboardLayout from '@/layouts/DashboardLayout'
 
-const router = createBrowserRouter([
+const homeRoutes = [
   {
     path: '/',
     element: <Layout />,
@@ -26,14 +28,34 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <RegisterPage />
-      },
-      {
-        path: 'dashboard',
-        element: <RequireAuth><Dashboard /></RequireAuth>
       }
     ]
   }
-])
+]
+
+const dashboardRoutes = [
+  {
+    path: '/dashboard',
+    element: (
+    // <AuthContext>
+    // <DashboardLayout />
+    // </AuthContext>
+      <DashboardLayout />
+
+    ),
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: '',
+        element: <Dashboard />
+      }
+    ]
+  }
+]
+
+const combinedRoutes = [...homeRoutes, ...dashboardRoutes]
+
+const router = createBrowserRouter(combinedRoutes)
 
 function App () {
   return (
@@ -43,7 +65,6 @@ function App () {
           <RouterProvider router={router} />
         </div>
         <TailwindIndicator />
-
       </ThemeProvider>
     </div>
   )
