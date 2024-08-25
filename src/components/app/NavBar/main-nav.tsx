@@ -1,3 +1,4 @@
+// main-nav.tsx
 import { cn } from '@/lib/utils'
 import { NavItem } from '@/types/nav'
 
