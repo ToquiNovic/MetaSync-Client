@@ -1,92 +1,74 @@
-// StepOne.tsx
-import { useState, useEffect, FC, SVGProps } from 'react'
+// stepOne.tsx
+import { FC } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import { CardContent, CardFooter } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { JSX } from 'react/jsx-runtime'
+import LoadingButton from '@/components/app/Register/LoadingButton'
+import { Button } from '@/components/ui/button'
+import { Chrome } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import useFormStore from '@/store/useFormStore'
 
 interface StepOneProps {
-    onNext: () => void;
-  }
+  onNext: () => void;
+}
 
 const StepOne: FC<StepOneProps> = ({ onNext }) => {
-  const [isLoading, setIsLoading] = useState(true)
+  const { stepOneData, setStepOneData } = useFormStore()
 
-  const loadData = () => {
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 500)
+  const handleNextClick = () => {
+    onNext()
   }
-
-  useEffect(() => {
-    loadData()
-  }, [])
 
   return (
     <div className='space-y-4'>
-      {isLoading
-        ? (
-          <>
-            <Skeleton className='h-4 w-full my-2' />
-            <Skeleton className='h-4 w-full my-2' />
-            <Skeleton className='h-8 w-32 my-2' />
-          </>
-          )
-        : (
-          <>
-            <CardContent className='space-y-4'>
-              <div className='space-y-2'>
-                <Label htmlFor='email'>Correo Electronico</Label>
-                <Input id='email' type='email' placeholder='example@email.com' required />
-              </div>
-              <div className='space-y-2'>
-                <div className='flex items-center justify-between'>
-                  <Label htmlFor='password'>Contraseña</Label>
-                </div>
-                <Input id='password' type='password' required />
-              </div>
-              <Separator className='my-4' />
-              <div className='space-y-2'>
-                <Button variant='outline' className='w-full'>
-                  <ChromeIcon className='mr-2 h-5 w-5' />
-                  Registrarse con Google
-                </Button>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button variant='ghost' className='w-full' />
-              <Button onClick={onNext}>Siguiente</Button>
-            </CardFooter>
-          </>
-          )}
+      <div className='space-y-2'>
+        <Label htmlFor='email' className='text-primary-foreground'>Correo Electrónico</Label>
+        <Input
+          id='email'
+          type='email'
+          value={stepOneData.email}
+          onChange={(e) => setStepOneData({
+            email: e.target.value,
+            password: stepOneData.password
+          })}
+          placeholder='example@email.com'
+          required
+        />
+      </div>
+      <div className='space-y-2'>
+        <Label htmlFor='password' className='text-primary-foreground'>Contraseña</Label>
+        <Input
+          id='password'
+          type='password'
+          value={stepOneData.password}
+          onChange={(e) => setStepOneData({
+            password: e.target.value,
+            email: stepOneData.email
+          })}
+          required
+        />
+      </div>
+
+      <Separator className='my-4' />
+
+      <div className='space-y-2'>
+        <Button variant='outline' className='w-full'>
+          <Chrome className='mr-2 h-5 w-5' />
+          Iniciar Sesión con Google
+        </Button>
+      </div>
+
+      <div className='flex justify-between items-center'>
+        <Label>
+          <Link to='/login' className='text-sm hover:underline'>
+            ¿Ya tienes una cuenta? Inicia sesión
+          </Link>
+        </Label>
+        <LoadingButton onClick={handleNextClick} label='Siguiente' />
+      </div>
     </div>
   )
 }
 
 export default StepOne
-
-function ChromeIcon (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns='http://www.w3.org/2000/svg'
-      width='24'
-      height='24'
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-    >
-      <circle cx='12' cy='12' r='10' />
-      <circle cx='12' cy='12' r='4' />
-      <line x1='21.17' x2='12' y1='8' y2='8' />
-      <line x1='3.95' x2='8.54' y1='6.06' y2='14' />
-      <line x1='10.88' x2='15.46' y1='21.94' y2='14' />
-    </svg>
-  )
-}
