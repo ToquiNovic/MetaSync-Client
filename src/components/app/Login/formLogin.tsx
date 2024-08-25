@@ -13,7 +13,7 @@ export default function FormLogin () {
   }
 
   return (
-    <div className='flex items-center justify-center min-h-screen w-full px-4'>
+    <div className='container grid items-center gap-6 pb-8 pt-20 md:py-10'>
       <Card className='w-full max-w-md'>
         <CardHeader>
           <CardTitle className='text-2xl font-bold'>Iniciar Sesión</CardTitle>
